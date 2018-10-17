@@ -30,3 +30,14 @@
 *.exe
 *.out
 *.app
+*.ipch
+*.lastbuildstate
+*.tlog
+assessment/CW1/VS project/.vs/
+assessment/CW1/VS project/
+.VC.db
+*.db
+*.db-shm
+*.db-wal
+Debug/
+Release/
