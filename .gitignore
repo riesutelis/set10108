@@ -41,3 +41,6 @@ assessment/CW1/VS project/
 *.db-wal
 Debug/
 Release/
+*.csv
+assessment/CW1/DataCollator/exe/
+assessment/CW1/DataCollator/DataCollator/.vs/

@@ -7,21 +7,32 @@ using namespace std;
 
 int main()
 {
-	string s = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-	ofstream results("difficulty.csv", ofstream::out);
-	for (int j = 0; j < 100; j++)
+	string s = "qwertyuiop[]asdfghjklzxcvbnm";
+
+	for (int dat = 0; dat <= 3; dat++)
 	{
-		results << "Iteration " << j << "," << endl;
-
-		block_chain bchain;
-		for (uint32_t i = 1; i < 100u; ++i)
+		string data = "";
+		for (int i = 0; i <= dat; i++)
+			data += s;
+		for (int diff = 1; diff <= 4; diff++)
 		{
-			results << "Block " << i << "," << endl;
-
-			cout << "Mining block " << i << "..." << endl;
-			bchain.add_block(block(i, string("Block ") + to_string(i) + string(" Data") + s));
+			ofstream *file = new ofstream("data " + to_string(dat) + " difficulty " + to_string(diff) + ".csv", ofstream::out);
+			for (int i = 1; i <= 100; i++)
+				*file << "Block " << i << ", ";
+			*file << endl;
+			for (int j = 1; j <= 100; j++)
+			{
+				block_chain bchain;
+				for (uint32_t i = 1; i <= 100u; ++i)
+				{
+					cout << "Data size " << dat << " Difficulty " << diff << " Test " << j << endl;
+					cout << "Mining block " << i << "..." << endl;
+					bchain.add_block(block(i, string("Block ") + to_string(i) + string(" Data") + data), file, diff);
+				}
+				*file << endl;
+			}
+			file->close();
 		}
 	}
-	results.close();
-    return 0;
+	return 0;
 }

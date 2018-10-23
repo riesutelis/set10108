@@ -8,6 +8,8 @@
 using namespace std;
 using namespace std::chrono;
 
+ofstream *result;
+
 // Note that _time would normally be set to the time of the block's creation.
 // This is part of the audit a block chain.  To enable consistent results
 // from parallelisation we will just use the index value, so time increments
@@ -21,7 +23,8 @@ void block::mine_block(uint32_t difficulty) noexcept
 {
 	string str(difficulty, '0');
 
-	auto start = system_clock::now();
+	//auto start = system_clock::now();
+	auto start = steady_clock::now();
 
 	while (_hash.substr(0, difficulty) != str)
 	{
@@ -29,8 +32,10 @@ void block::mine_block(uint32_t difficulty) noexcept
 		_hash = calculate_hash();
 	}
 
-	auto end = system_clock::now();
+	//auto end = system_clock::now();
+	auto end = steady_clock::now();
 	duration<double> diff = end - start;
+	*result << diff.count() << ", ";
 
 	cout << "Block mined: " << _hash << " in " << diff.count() << " seconds" << endl;
 }
@@ -48,12 +53,14 @@ std::string block::calculate_hash() const noexcept
 block_chain::block_chain()
 {
 	_chain.emplace_back(block(0, "Genesis Block"));
-	_difficulty = 4;
+	_difficulty = 1;
 }
 
-void block_chain::add_block(block &&new_block) noexcept
+void block_chain::add_block(block &&new_block, std::ofstream* f, uint32_t diff) noexcept
 {
+	result = f;
 	new_block.prev_hash = get_last_block().get_hash();
-	new_block.mine_block(_difficulty);
+	//new_block.mine_block(_difficulty);
+	new_block.mine_block(diff);
 	_chain.push_back(new_block);
 }
