@@ -4,7 +4,7 @@
 #include <vector>
 #include <fstream>
 
-class block
+class block_par
 {
 private:
 	// The index of the block in the chain.
@@ -21,7 +21,7 @@ private:
 	std::string calculate_hash() const noexcept;
 
 public:
-	block(uint32_t index, const std::string &data);
+	block_par(uint32_t index, const std::string &data);
 
 	// Difficulty is the minimum number of zeros we require at the
 	// start of the hash.
@@ -33,17 +33,17 @@ public:
 	std::string prev_hash;
 };
 
-class block_chain
+class block_chain_par
 {
 private:
 	uint32_t _difficulty;
-	std::vector<block> _chain;
+	std::vector<block_par> _chain;
 
-	inline const block& get_last_block() const noexcept { return _chain.back(); }
+	inline const block_par& get_last_block() const noexcept { return _chain.back(); }
 
 public:
-	block_chain();
+	block_chain_par();
 
 
-	void add_block(block &&new_block, std::ofstream* f, uint32_t diff) noexcept;
+	void add_block(block_par &&new_block, std::ofstream* f, uint32_t diff, uint32_t chunk) noexcept;
 };

@@ -7,13 +7,16 @@ using namespace std;
 
 int main()
 {
-	string s = "qwertyuiop[]asdfghjklzxcvbnm";
+	string s = "qwertyuiopasdfghjklzxcvbnmqwertyuiopasdf";
 
-	for (int dat = 0; dat <= 3; dat++)
+	for (int dat = 0; dat < 3; dat++)
 	{
 		string data = "";
 		for (int i = 0; i <= dat; i++)
-			data += s;
+		{
+			s += s;
+			data = s;
+		}
 		for (int diff = 1; diff <= 4; diff++)
 		{
 			ofstream *file = new ofstream("data " + to_string(dat) + " difficulty " + to_string(diff) + ".csv", ofstream::out);

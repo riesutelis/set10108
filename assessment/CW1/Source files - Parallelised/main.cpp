@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include "block_chain.h"
+#include "block_chain_par_while.h"
 
 using namespace std;
 
@@ -29,7 +30,7 @@ int main()
 					{
 						cout << "Data size " << dat << " Difficulty " << diff << " Test " << j << endl;
 						cout << "Mining block " << i << "..." << endl;
-						bchain.add_block(block(i, string("Block ") + to_string(i) + string(" Data") + data), file, diff, chunk);
+						bchain.add_block(block(i, string("Block ") + to_string(i) + string(" Data") + data), file, diff);
 					}
 					*file << endl;
 				}
