@@ -161,6 +161,6 @@ std::string sha256_par(const std::string &input)
     char buf[2 * SHA256_par::DIGEST_SIZE + 1];
     buf[2 * SHA256_par::DIGEST_SIZE] = 0;
     for (size_t i = 0; i < SHA256_par::DIGEST_SIZE; ++i)
-        sprintf(buf + i * 2, "%02x", digest[i]);/////////////////////////////////// Parallel here ///////////////////////////
+        sprintf(buf + i * 2, "%02x", digest[i]);
     return std::string(buf);
 }

@@ -12,7 +12,7 @@ int main()
 	for (int dat = 0; dat < 3; dat++)
 	{
 		string data = "";
-		for (int i = 0; i <= dat; i++)
+		for (int i = 0; i < dat; i++)
 		{
 			s += s;
 			data = s;
