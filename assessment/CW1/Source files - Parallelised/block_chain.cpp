@@ -1,5 +1,5 @@
 #include "block_chain.h"
-#include "sha256.h"
+#include "sha256_par_for.h"
 
 #include <iostream>
 #include <sstream>
@@ -23,7 +23,6 @@ void block::mine_block(uint32_t difficulty) noexcept
 {
 	string str(difficulty, '0');
 
-	//auto start = system_clock::now();
 	auto start = steady_clock::now();
 
 	while (_hash.substr(0, difficulty) != str)
@@ -32,7 +31,6 @@ void block::mine_block(uint32_t difficulty) noexcept
 		_hash = calculate_hash();
 	}
 
-	//auto end = system_clock::now();
 	auto end = steady_clock::now();
 	duration<double> diff = end - start;
 	*result << diff.count() << ", ";
@@ -42,12 +40,9 @@ void block::mine_block(uint32_t difficulty) noexcept
 
 std::string block::calculate_hash() const noexcept
 {
-	/*stringstream ss;
-	ss << _index << _time << _data << _nonce << prev_hash;
-	return sha256(ss.str());*/
 	string s;
 	s = std::to_string(_index) + std::to_string(_time) + _data + std::to_string(_nonce) + prev_hash;
-	return sha256(s);
+	return sha256_par(s);
 }
 
 block_chain::block_chain()
@@ -60,7 +55,6 @@ void block_chain::add_block(block &&new_block, std::ofstream* f, uint32_t diff) 
 {
 	result = f;
 	new_block.prev_hash = get_last_block().get_hash();
-	//new_block.mine_block(_difficulty);
 	new_block.mine_block(diff);
 	_chain.push_back(new_block);
 }

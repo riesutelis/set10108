@@ -35,33 +35,44 @@ void block_par::mine_block(uint32_t difficulty) noexcept
 	std::string thread_hash; // A private hash contaner for each thread
 	int lowest_i = INT32_MAX; // Shared lowestt index used to get the first good hash
 	bool good = false; // Private bool to tell a thread if a good hash is found
+	uint64_t i = 1; // The STARTING index for the current thread pool
 
-	int i = 1;
+	// While a valid string has not been found (!done), run parralel calculations in designated chunk sizes, for each available thread
 	while (!done)
 #pragma omp parallel num_threads(thread_count) default(none) shared(lowest_i, done) private(good, thread_hash, chunk_size)
 	{
-		int nonce = omp_get_thread_num() * chunk_size + i;
+		// Starting index for this thread
+		uint64_t nonce = omp_get_thread_num() * chunk_size + i;
 		for (int j = 0; j < chunk_size; j++)
 		{
+			// Hash is saved to a thread-private variable
 			thread_hash = calculate_hash(nonce);
+			// If a hash passes the difficulty check, set the thread-private completion variable to true and stops the chunk loop
 			if (thread_hash.substr(0, difficulty) == str)
 			{
 				good = true;
 				break;
 			}
+			// Only increase the thread-private nonce if the difficulty chack has failed
 			else
 				nonce++;
 		}
+		// All threads must complete their hashing before this point. Afterwards, results are compared.
 #pragma omp barrier
+		// Next section has to be done by only one thred at a time, as it requires finding the lowest nonce value
+		// Note that all of this is still done in each thread as opposed to just the main thread. This means each thread still has access to it's private variables
 #pragma omp critical
 		{
+			// If this thread has found a good (passed the difficulty test) hash
 			if (good)
+				// In case multiple threads found a good hash get the one with the lowest index
 				if (nonce < lowest_i)
 				{
 					lowest_i = nonce;
 					done = true;
 					_hash = thread_hash;
 				}
+			// Each thread adds the chunk size to i to collectively bring it up to next thread pool's iteration starting point
 			i += chunk_size;
 		}
 	}
@@ -73,6 +84,7 @@ void block_par::mine_block(uint32_t difficulty) noexcept
 	cout << "Block mined: " << _hash << " in " << diff.count() << " seconds" << endl;
 }
 
+// Calculate hash now uses an input integer value for attempt index instead of the member value '_nonce'
 std::string block_par::calculate_hash(uint64_t nonce) const noexcept
 {
 	string s;

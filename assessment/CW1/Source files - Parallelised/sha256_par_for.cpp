@@ -2,6 +2,8 @@
 
 #include <cstring>
 #include <fstream>
+#include <thread>
+#include <vector>
 
 using namespace std;
 
@@ -150,6 +152,25 @@ void SHA256_par::final(unsigned char *digest)
     }
 }
 
+// Method for constructing a string using multiple threads
+// buffer - buffer to write to
+// digest - char aray to encode as hex to buffer
+// offset - offset for the DIGEST to make sure all threads write to different parts of the buffer
+void make_string(char *buffer, unsigned char *digest, const int &offset)
+{
+	// Because sprintf automatically appends a null terminator a temporary buffer is required
+	char tmp[3];
+	// Loop for the chunk calculated for a thread
+	for (int i = 0; i < SHA256_par::DIGEST_SIZE / 4; i++)
+	{
+		// Write hex to temporary buffer
+		sprintf(tmp, "%02x", digest[i + offset]);
+		// Copy relevant chars to the output buffer
+		buffer[i * 2 + offset * 2] = tmp[0];
+		buffer[i * 2 + 1 + offset * 2] = tmp[1];
+	}
+}
+
 std::string sha256_par(const std::string &input)
 {
     unsigned char digest[SHA256_par::DIGEST_SIZE];
@@ -160,7 +181,15 @@ std::string sha256_par(const std::string &input)
     ctx.final(digest);
     char buf[2 * SHA256_par::DIGEST_SIZE + 1];
     buf[2 * SHA256_par::DIGEST_SIZE] = 0;
-    for (size_t i = 0; i < SHA256_par::DIGEST_SIZE; ++i)
-        sprintf(buf + i * 2, "%02x", digest[i]);
+
+	vector<thread> threads;
+	// Create threads
+	for (int i = 0; i < 4; i++)
+		threads.push_back(thread(make_string, buf, digest, (SHA256_par::DIGEST_SIZE / 4) * i));
+	for (auto &t : threads)
+		t.join();
+	// Add a null terminator to the end of the string
+	buf[2 * SHA256_par::DIGEST_SIZE] = '\0';
+
     return std::string(buf);
 }
