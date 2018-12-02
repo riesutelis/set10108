@@ -1,0 +1,3 @@
+C:/Univeras/bitbucket/set10108/labs/lab05/mpi build/CMakeFiles/mpis_stuff.dir
+C:/Univeras/bitbucket/set10108/labs/lab05/mpi build/CMakeFiles/ALL_BUILD.dir
+C:/Univeras/bitbucket/set10108/labs/lab05/mpi build/CMakeFiles/ZERO_CHECK.dir

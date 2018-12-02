@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Univeras\bitbucket\set10108\labs\lab05\Mpi\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Univeras\bitbucket\set10108\labs\lab05\Mpi\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{204A649C-422E-37BB-BAF6-0D2E820C3C8F}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

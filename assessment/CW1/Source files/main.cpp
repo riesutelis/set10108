@@ -9,7 +9,7 @@ int main()
 {
 	string s = "qwertyuiopasdfghjklzxcvbnmqwertyuiopasdf";
 
-	for (int dat = 0; dat < 3; dat++)
+	for (int dat = 0; dat <= 3; dat++)
 	{
 		string data = "";
 		for (int i = 0; i < dat; i++)
@@ -17,7 +17,7 @@ int main()
 			s += s;
 			data = s;
 		}
-		for (int diff = 1; diff <= 4; diff++)
+		for (int diff = 4; diff <= 4; diff++)
 		{
 			ofstream *file = new ofstream("data " + to_string(dat) + " difficulty " + to_string(diff) + ".csv", ofstream::out);
 			for (int i = 1; i <= 100; i++)
